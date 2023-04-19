@@ -26,9 +26,10 @@ inputVideo.addEventListener("change", function () {
         const outputBlob = new Blob([outputData.buffer], { type: 'image/gif' });
         const outputURL = URL.createObjectURL(outputBlob);
 
-        const gifAni = document.getElementById("gif-ani");
-        gifAni.addEventListener("loadedmetadata", function () {
-        gifAni.src = outputURL;
+        outputURL.addEventListener("loadedmetadata", function () {
+            const gifAni = document.createElement("img");
+            gifAni.src = outputURL
+            document.body.appendChild(gifAni)
         })
     });
 });
