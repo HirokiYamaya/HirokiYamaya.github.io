@@ -25,11 +25,14 @@ inputVideo.addEventListener("change", function () {
         const outputData = ffmpeg.FS('readFile', 'output.gif');
         const outputBlob = new Blob([outputData.buffer], { type: 'image/gif' });
         const outputURL = URL.createObjectURL(outputBlob);
+        const gifAni = document.createElement("img");
+        gifAni.src = outputURL
+        document.body.appendChild(gifAni)
 
-        outputURL.addEventListener("loadedmetadata", function () {
-            const gifAni = document.createElement("img");
-            gifAni.src = outputURL
-            document.body.appendChild(gifAni)
-        })
+//         outputURL.addEventListener("loadedmetadata", function () {
+//             const gifAni = document.createElement("img");
+//             gifAni.src = outputURL
+//             document.body.appendChild(gifAni)
+//         })
     });
 });
