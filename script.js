@@ -18,11 +18,15 @@ inputVideo.addEventListener("change", function () {
     video.addEventListener('loadedmetadata', async function () {
         await ffmpeg.load();
         ffmpeg.FS('writeFile', 'input.mp4', new Uint8Array(await file.arrayBuffer()));
-        ffmpeg.FS('unmount');
-        await ffmpeg.run('-i', 'input.mp4', '-ss', '00:00:05', '-t', '00:00:10', '-c', 'copy', 'output.mp4');
-        const outputData = ffmpeg.FS('readFile', 'output.mp4');
-        const outputBlob = new Blob([outputData.buffer], { type: 'video/mp4' });
+        
+        let fps = 10;
+        let width = 200;
+        await ffmpeg.run('-i', 'input.mp4', '-vf', `fps=${fps},scale=${width}:-1:flags=lanczos,split[s0][s1];[s0]palettegen[p];[s1][p]paletteuse`, '-loop', '0', 'output.gif');
+        const outputData = ffmpeg.FS('readFile', 'output.gif');
+        const outputBlob = new Blob([outputData.buffer], { type: 'image/gif' });
         const outputURL = URL.createObjectURL(outputBlob);
-        video.src = outputURL;
+
+        const gifAni = document.getElementById("gif-ani");
+        gifAni.src = outputURL;
     });
 });
