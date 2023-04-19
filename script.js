@@ -12,8 +12,8 @@ inputVideo.addEventListener("change", function () {
     video.controls = true;
     document.body.appendChild(video);
 
-    const { createFFmpeg, fetchFile } = FFmpeg;
-    const ffmpeg = createFFmpeg({ log: true });
+    const { createFFmpegCore, fetchFile } = FFmpeg;
+    const ffmpeg = createFFmpegCore({ log: true });
 
     video.addEventListener('loadedmetadata', async function () {
         await ffmpeg.load();
