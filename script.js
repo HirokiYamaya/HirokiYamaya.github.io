@@ -28,11 +28,5 @@ inputVideo.addEventListener("change", function () {
         const gifAni = document.createElement("img");
         gifAni.src = outputURL
         document.body.appendChild(gifAni)
-
-//         outputURL.addEventListener("loadedmetadata", function () {
-//             const gifAni = document.createElement("img");
-//             gifAni.src = outputURL
-//             document.body.appendChild(gifAni)
-//         })
     });
 });
