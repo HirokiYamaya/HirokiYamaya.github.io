@@ -27,6 +27,8 @@ inputVideo.addEventListener("change", function () {
         const outputURL = URL.createObjectURL(outputBlob);
 
         const gifAni = document.getElementById("gif-ani");
+        gifAni.addEventListener("loadedmetadata", function () {
         gifAni.src = outputURL;
+        })
     });
 });
