@@ -107,8 +107,16 @@ let fileData = "";
 inputVideo.addEventListener("change", function () {
   readVideo(inputVideo.files[0]);
   video.addEventListener("loadedmetadata", async function () {
-    getVideoProperty()
-    fileData = new Uint8Array(await inputVideo.files[0].arrayBuffer())
+    getVideoProperty();
+    
+    slider.updateOptions({
+      range: {
+        'min': Math.floor(minTime),
+        'max': Math.floor(maxTime)
+      }
+    });
+    
+    fileData = new Uint8Array(await inputVideo.files[0].arrayBuffer());
 
     //   await ffmpeg.load();
     //   ffmpeg.FS("writeFile", "input.mp4", new Uint8Array(await file.arrayBuffer()));
@@ -142,13 +150,13 @@ resetButton.addEventListener("click", function () {
 })
 
 // トリミングスライダー初期設定
-noUiSlider.create(range, {
+const slider = noUiSlider.create(range, {
   range: {
-    "min": minTime,
-    "max": maxTime
+    "min": Math.floor(minTime),
+    "max": Math.floor(maxTime)
   },
   step: 0.5,
-  start: [minTime, maxTime],
+  start: [Math.floor(minTime), Math.floor(maxTime)],
   connect: true,
   behaviour: "tap-drag",
   tooltips: true,
@@ -277,12 +285,18 @@ async function startCapture() {
     rec.onstop = async () => {
       modal.style.display = "none";
       const webm = new Blob(chunks, { "type": "video/webm" });
-      readVideo(webm)
+      readVideo(webm);
       videoElem.srcObject = null;
-      getVideoProperty()
+      getVideoProperty();
+      slider.updateOptions({
+      range: {
+        'min': Math.floor(minTime),
+        'max': Math.floor(maxTime)
+        }
+      });
     }
   };
-  startRecording()
+  startRecording();
 
 }
 
