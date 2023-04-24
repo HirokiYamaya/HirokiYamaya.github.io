@@ -108,7 +108,7 @@ inputVideo.addEventListener("change", function () {
   readVideo(inputVideo.files[0]);
   video.addEventListener("loadedmetadata", async function () {
     getVideoProperty()
-    fileData = new Uint8Array(await file.arrayBuffer())
+    fileData = new Uint8Array(await inputVideo.files[0].arrayBuffer())
 
     //   await ffmpeg.load();
     //   ffmpeg.FS("writeFile", "input.mp4", new Uint8Array(await file.arrayBuffer()));
