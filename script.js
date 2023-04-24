@@ -197,16 +197,16 @@ create.addEventListener("click", async function (event) {
   // maxTime
 
   // FFmpegのインポート
-  const { createFFmpeg, fetchFile } = FFmpeg;
-  const ffmpeg = createFFmpeg({ log: true });
+//   const { createFFmpeg, fetchFile } = FFmpeg;
+//   const ffmpeg = createFFmpeg({ log: true });
 
-  await ffmpeg.load();
-  ffmpeg.FS("writeFile", "input.mp4", new Uint8Array(await file.arrayBuffer()));
-  await ffmpeg.run("-i", "input.mp4", "-vf", `fps=${outputFps},scale=${outputWidth}:-1:flags=lanczos,split[s0][s1];[s0]palettegen[p];[s1][p]paletteuse`, "-loop", "0", "output.gif");
-  const outputData = ffmpeg.FS("readFile", "output.gif");
-  const outputBlob = new Blob([outputData.buffer], { type: "image/gif" });
-  const outputURL = URL.createObjectURL(outputBlob);
-  gifImage.src = outputURL
+//   await ffmpeg.load();
+//   ffmpeg.FS("writeFile", "input.mp4", new Uint8Array(await file.arrayBuffer()));
+//   await ffmpeg.run("-i", "input.mp4", "-vf", `fps=${outputFps},scale=${outputWidth}:-1:flags=lanczos,split[s0][s1];[s0]palettegen[p];[s1][p]paletteuse`, "-loop", "0", "output.gif");
+//   const outputData = ffmpeg.FS("readFile", "output.gif");
+//   const outputBlob = new Blob([outputData.buffer], { type: "image/gif" });
+//   const outputURL = URL.createObjectURL(outputBlob);
+//   gifImage.src = outputURL
 
   // gifImage.src = "test.gif"
 
