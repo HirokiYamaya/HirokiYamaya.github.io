@@ -224,7 +224,6 @@ async function startCapture() {
 
   try {
     videoElem.srcObject = await navigator.mediaDevices.getDisplayMedia({ video: { cursor: "always" }, audio: false });
-    dumpOptionsInfo();
   } catch (err) {
     console.error("Error: " + err);
   }
