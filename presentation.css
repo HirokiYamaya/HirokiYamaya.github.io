@@ -221,6 +221,7 @@ input[type=radio] {
     height: 70vh;
     border-radius: 1vw;
     display: flex;
+    flex-flow: column;
     align-items: center;
     justify-content: center;
 }
