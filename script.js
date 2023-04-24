@@ -196,6 +196,7 @@ create.addEventListener("click", async function (event) {
   // FFmpegのインポート
   const { createFFmpeg, fetchFile } = FFmpeg;
   const ffmpeg = createFFmpeg({ log: true });
+  await ffmpeg.load();
 
   const fileData = await fetch(video.src).then((response) => response.arrayBuffer());
   ffmpeg.FS('writeFile', 'input.mp4', new Uint8Array(fileData));
