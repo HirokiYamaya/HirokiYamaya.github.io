@@ -232,6 +232,7 @@ input[type=radio] {
     height: auto;
     aspect-ratio: 16 / 9;
     display: flex;
+    flex-flow: column;
     align-items: center;
     justify-content: center;
 }
