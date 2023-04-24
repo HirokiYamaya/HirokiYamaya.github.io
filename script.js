@@ -191,8 +191,10 @@ create.addEventListener("click", async function (event) {
   square.style.visibility = "hidden";
   getVideoProperty()
 
-  const speed = 1;
-  const fade = true;
+  const speed = video.playbackRate;
+  const fade = document.getElementById("fade").checked;
+  const fps = outputFps.value;
+  const outputW = outputWidth.value;
   // minTime
   // maxTime
 
@@ -204,7 +206,7 @@ create.addEventListener("click", async function (event) {
 //   const fileData = await fetch(video.src).then((response) => response.arrayBuffer());
 //   ffmpeg.FS('writeFile', 'input.mp4', new Uint8Array(fileData));
   ffmpeg.FS('writeFile', 'input.mp4', fileData);
-  await ffmpeg.run("-i", "input.mp4", "-vf", `fps=${outputFps},scale=${outputWidth}:-1:flags=lanczos,split[s0][s1];[s0]palettegen[p];[s1][p]paletteuse`, "-loop", "0", "output.gif");
+  await ffmpeg.run("-i", "input.mp4", "-vf", `fps=${fps},scale=${outputW}:-1:flags=lanczos,split[s0][s1];[s0]palettegen[p];[s1][p]paletteuse`, "-loop", "0", "output.gif");
   const outputData = ffmpeg.FS("readFile", "output.gif");
   const outputBlob = new Blob([outputData.buffer], { type: "image/gif" });
   const outputURL = URL.createObjectURL(outputBlob);
