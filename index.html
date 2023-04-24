@@ -2,29 +2,114 @@
 <html lang="ja">
 
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="theme-color" content="#000000">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" type="text/css" href="presentation.css">
+    <link rel="stylesheet" href="./modules/nouislider.css">
+    <meta name="theme-color" content="#000000">
+    <title>🌞</title>
 </head>
 
 <body>
-  <div>
-    <label for="avatar">Choose a movie:</label>
+    <div class="header-text">
+        <h1>GIF Animator🌞</h1>
+        <div class="box1">
+            <p class="text">選択した動画をFFmpegでGIFアニメに変換します。</p>
+            <p class="text">設定⭕ Fps Width FadeInOut SpeedRate trimming</p>
+        </div>
+    </div>
 
-    <input type="file" id="input-video" accept="video/*">
+    <div class="side">
+        <div class="left-side">
+            <div class="input-area">
+                <div id="drop-area" class="text">
+                    <label for="avatar">ここにファイルをドロップしてください。</label>
+                    または、<input type="file" id="input-video" accept="video/*">
+                    <button id="cap-start">
+                        🎥
+                    </button>
+                </div>
+                <div id="setting">
+                    <table>
+                        <caption>出力設定</caption>
+                        <tr>
+                            <th><label>Fps</label></th>
+                            <td><input type="number" value="10" step="1" class="input-number" id="fps"></td>
+                        </tr>
+                        <tr>
+                            <th><label>Width(px)</label></th>
+                            <td><input type="number" value="150" step="50" class="input-number" id="image-width">
+                            </td>
+                        </tr>
+                    </table>
+                    <label><b>FadeInOut</b></label>
+                    <input type="checkbox" name="fade">
+                </div>
+            </div>
+            <div>
+                <video id="video" muted controls></video>
+            </div>
 
-  </div>
-  <div>
-    <video id="video" controls></video>
-  </div>
-  <div>
-    <video src="" type="image/gif" id="gif-ani" autoplay loop></video>
-  </div>
-  <!-- <script type="text/javascript" src="ffmpeg-core.js"></script> -->
-<!--   <script type="text/javascript" src="coi-serviceworker.js"></script> -->
-  <script type="text/javascript" src="coi-serviceworker.min.js"></script>
-  <script type="text/javascript" src="ffmpeg.min.js"></script>
-  <script type="text/javascript" src="script.js"></script>
+        </div>
+        <div class="right-side">
+            <div id="preview-area">
+                <div id="preview">出力サイズ</div>
+                <img src="" id="gif-image"></img>
+            </div>
+        </div>
+    </div>
+    <div id="slider">
+        <div class="range-wrapper">
+            <div class="range-num">
+                <label><input type="radio" name="speed" value="025">0.25</label>
+                <label><input type="radio" name="speed" value="050">0.5</label>
+                <label><input type="radio" name="speed" value="075">0.75</label>
+                <label><input type="radio" name="speed" value="000" checked>Normal</label>
+                <label><input type="radio" name="speed" value="125">1.25</label>
+                <label><input type="radio" name="speed" value="150">1.5</label>
+                <label><input type="radio" name="speed" value="175">1.75</label>
+                <label><input type="radio" name="speed" value="200">2</label>
+            </div>
+            <div id="range"></div>
+        </div>
+        <div class="play-button-area">
+            <button class="favorite styled" type="button" id="play-button">
+                ▶
+            </button>
+            <button class="favorite styled" type="button" id="reset-button">
+                ⬅
+            </button>
+        </div>
+        <div class="create-area">
+            <button class="favorite styled" type="button" id="create-button">
+                ⚒
+            </button>
+            <button class="favorite styled" type="button" id="download-button">
+                💾
+            </button>
+        </div>
+
+    </div>
+    <div class="footer">
+        aaa
+    </div>
+
+    <div id="easyModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Recording🎥</h2>
+                <span id="modalClose">×</span>
+            </div>
+            <div class="modal-body">
+                <video id="video-cap" autoplay></video>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript" src="./modules/coi-serviceworker.min.js"></script>
+    <script type="text/javascript" src="./modules/ffmpeg.min.js"></script>
+    <script src="./modules/nouislider.min.js"></script>
+    <script type="text/javascript" src="script.js"></script>
+
 </body>
-
 </html>
