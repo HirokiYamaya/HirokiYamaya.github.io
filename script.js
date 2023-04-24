@@ -195,22 +195,54 @@ create.addEventListener("click", async function (event) {
   const fade = document.getElementById("fade").checked;
   const fps = outputFps.value;
   const outputW = outputWidth.value;
-  // minTime
-  // maxTime
+  
+  loading.innerText = "変換中";
 
   // FFmpegのインポート
   const { createFFmpeg, fetchFile } = FFmpeg;
   const ffmpeg = createFFmpeg({ log: true });
   await ffmpeg.load();
 
-//   const fileData = await fetch(video.src).then((response) => response.arrayBuffer());
-//   ffmpeg.FS('writeFile', 'input.mp4', new Uint8Array(fileData));
-  ffmpeg.FS('writeFile', 'input.mp4', fileData);
-  await ffmpeg.run("-i", "input.mp4", "-vf", `fps=${fps},scale=${outputW}:-1:flags=lanczos,split[s0][s1];[s0]palettegen[p];[s1][p]paletteuse`, "-loop", "0", "output.gif");
+  // ffmpeg.FS('writeFile', 'input.mp4', fileData);
+  // await ffmpeg.run(
+  //   "-ss",
+  //   `${new Date(minTime * 1000).toISOString().slice(11, 19)}`,
+  //   "-t",
+  //   `${new Date(maxTime * 1000).toISOString().slice(11, 19)}`,
+  //   "-i",
+  //   "input.mp4",
+  //   "-vf",
+  //   `fps=${fps},scale=${outputW}:-1:flags=lanczos,split[s0][s1];[s0]palettegen[p];[s1][p]paletteuse`,
+  //   "-loop",
+  //   "0",
+  //   "-filter_complex",
+  //   `setpts=PTS/${speed}`,
+  //   `fade=t=in:st=0:d=1,fade=t=out:st=${maxTime - 1}:d=1`,
+  //   "output.gif"
+  // );
+
+
+  await ffmpeg.run(
+    '-i',
+    'input.mp4',
+    '-filter_complex',
+    `[0:v]trim=${minTime}:${maxTime},setpts=PTS/${speed},fade=in:st=${minTime}:d=1,fade=out:st=${maxTime - 1}:d=1,scale=${outputW}:-1[v]`,
+    '-map',
+    '[v]',
+    '-r',
+    fps,
+    '-f',
+    'gif',
+    '-loop',
+    '0',
+    'output.gif'
+  );
+
   const outputData = ffmpeg.FS("readFile", "output.gif");
   const outputBlob = new Blob([outputData.buffer], { type: "image/gif" });
   const outputURL = URL.createObjectURL(outputBlob);
   gifImage.src = outputURL
+  loading.innerText = "";
 
   // gifImage.src = "test.gif"
 
