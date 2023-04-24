@@ -203,7 +203,7 @@ create.addEventListener("click", async function (event) {
   const ffmpeg = createFFmpeg({ log: true });
   await ffmpeg.load();
 
-  // ffmpeg.FS('writeFile', 'input.mp4', fileData);
+  ffmpeg.FS('writeFile', 'input.mp4', fileData);
   // await ffmpeg.run(
   //   "-ss",
   //   `${new Date(minTime * 1000).toISOString().slice(11, 19)}`,
