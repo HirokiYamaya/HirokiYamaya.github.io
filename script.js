@@ -175,7 +175,7 @@ const slider = noUiSlider.create(range, {
 });
 
 // 再生開始秒の反映
-range.noUiSlider.on("update", function (values, handle) {
+range.noUiSlider.on("update", function (values) {
   video.currentTime = Math.trunc(values[0]);
   minTime = Math.trunc(values[0]);
   maxTime = Math.trunc(values[1]);
@@ -202,7 +202,7 @@ outputWidth.addEventListener("change", function () {
 })
 
 // Gifに変換
-create.addEventListener("click", async function (event) {
+create.addEventListener("click", async function () {
   square.style.visibility = "hidden";
 
   const speed = video.playbackRate;
@@ -240,20 +240,22 @@ create.addEventListener("click", async function (event) {
   const outputData = ffmpeg.FS("readFile", "output.gif");
   const outputBlob = new Blob([outputData.buffer], { type: "image/gif" });
   const outputURL = URL.createObjectURL(outputBlob);
-  gifImage.src = outputURL
+  download.href = outputURL;
+  gifImage.src = outputURL;
   loading.innerText = "";
 })
 
 // ダウンロード
 download.addEventListener("click", function clickDl() {
-  download.href = gifImage.src;
   gifImage.download = "output.gif";
 });
 
-startElem.addEventListener("click", function (evt) {
+// 画面キャプチャーボタン押したときの処理
+startElem.addEventListener("click", function () {
   startCapture();
 }, false);
 
+// 画面キャプチャーの処理
 async function startCapture() {
   modal.style.display = "flex";
 
