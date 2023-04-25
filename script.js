@@ -242,7 +242,7 @@ create.addEventListener("click", async function () {
   const outputURL = URL.createObjectURL(outputBlob);
   download.href = outputURL;
   gifImage.src = outputURL;
-  loading.innerText = "";
+  loading.innerText = `${(outputBlob.size / 1000).toFixed()}KB`;
 })
 
 // ダウンロード
