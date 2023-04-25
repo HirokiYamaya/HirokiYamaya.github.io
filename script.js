@@ -246,8 +246,9 @@ create.addEventListener("click", async function () {
 })
 
 // ダウンロード
-download.addEventListener("click", function clickDl() {
-  gifImage.download = "output.gif";
+download.addEventListener("click", function () {
+  download.download = "output.gif";
+  download.click()
 });
 
 // 画面キャプチャーボタン押したときの処理
