@@ -68,7 +68,7 @@ let outputQuality = document.getElementById("image-quality");
 let aspectRatio = 16 / 9;
 
 // 読み込みデータ
-const fileData = "";
+let fileData = "";
 
 // アスペクト比計算
 function gcd(x, y) {
