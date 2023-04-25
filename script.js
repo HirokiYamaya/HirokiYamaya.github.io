@@ -285,6 +285,7 @@ async function startCapture() {
     rec.onstop = async () => {
       modal.style.display = "none";
       const webm = new Blob(chunks, { "type": "video/webm" });
+      fileData = new Uint8Array(await webm.arrayBuffer());
       readVideo(webm);
       videoElem.srcObject = null;
       getVideoProperty();
