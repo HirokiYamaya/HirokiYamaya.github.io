@@ -43,6 +43,12 @@ const download = document.getElementById("download-button");
 const videoElem = document.getElementById("video-cap");
 const startElem = document.getElementById("cap-start");
 
+// ロード中表示
+const loading = document.getElementById("loading");
+
+// 再生時間の表示
+const playTime = document.getElementById("play-time")
+
 // 再生最小時間（トリミングに反映）
 let minTime = 0;
 
@@ -55,8 +61,14 @@ let outputFps = document.getElementById("fps");
 // GIF出力画像幅
 let outputWidth = document.getElementById("image-width");
 
+// GIF出力品質
+let outputQuality = document.getElementById("image-quality");
+
 // アスペクト比
 let aspectRatio = 16 / 9;
+
+// 読み込みデータ
+const fileData = "";
 
 // アスペクト比計算
 function gcd(x, y) {
@@ -83,6 +95,17 @@ function getVideoProperty() {
   outputWidth.value = w;
 }
 
+// スライダーの更新
+function sliderUpdate() {
+  slider.updateOptions({
+    range: {
+      'min': Math.floor(minTime),
+      'max': Math.floor(maxTime)
+    },
+    start: [Math.floor(minTime), Math.floor(maxTime)]
+  });
+}
+
 // ドラッグオーバー時の処理
 dropVideo.addEventListener("dragover", function (event) {
   event.preventDefault();
@@ -101,33 +124,13 @@ dropVideo.addEventListener("drop", function (event) {
   readVideo(inputVideo.files[0]);
 });
 
-let fileData = "";
-
 // ファイルを選択ボタンからの処理
 inputVideo.addEventListener("change", function () {
   readVideo(inputVideo.files[0]);
   video.addEventListener("loadedmetadata", async function () {
     getVideoProperty();
-    
-    slider.updateOptions({
-      range: {
-        'min': Math.floor(minTime),
-        'max': Math.floor(maxTime)
-      }
-    });
-    
+    sliderUpdate();
     fileData = new Uint8Array(await inputVideo.files[0].arrayBuffer());
-
-    //   await ffmpeg.load();
-    //   ffmpeg.FS("writeFile", "input.mp4", new Uint8Array(await file.arrayBuffer()));
-    //   await ffmpeg.run("-i", "input.mp4", "-vf", `fps=${outputFps},scale=${outputWidth}:-1:flags=lanczos,split[s0][s1];[s0]palettegen[p];[s1][p]paletteuse`, "-loop", "0", "output.gif");
-    //   const outputData = ffmpeg.FS("readFile", "output.gif");
-    //   const outputBlob = new Blob([outputData.buffer], { type: "image/gif" });
-    //   const outputURL = URL.createObjectURL(outputBlob);
-    //   const gifAni = document.createElement("img");
-    //   gifAni.src = outputURL
-    //   document.body.appendChild(gifAni)
-    // });
   });
 });
 
@@ -147,6 +150,10 @@ resetButton.addEventListener("click", function () {
   video.pause();
   playButton.innerText = "▶";
   video.currentTime = minTime;
+})
+
+video.addEventListener("timeupdate", function () {
+  playTime.innerText = (video.currentTime).toFixed(1);
 })
 
 // トリミングスライダー初期設定
@@ -197,13 +204,13 @@ outputWidth.addEventListener("change", function () {
 // Gifに変換
 create.addEventListener("click", async function (event) {
   square.style.visibility = "hidden";
-//   getVideoProperty()
 
   const speed = video.playbackRate;
-  const fade = document.getElementById("fade").checked;
+  // const fade = document.getElementById("fade").checked;
   const fps = outputFps.value;
   const outputW = outputWidth.value;
-  
+  const quality = outputQuality.value;
+
   loading.innerText = "変換中";
 
   // FFmpegのインポート
@@ -212,24 +219,6 @@ create.addEventListener("click", async function (event) {
   await ffmpeg.load();
 
   ffmpeg.FS('writeFile', 'input.mp4', fileData);
-  // await ffmpeg.run(
-  //   "-ss",
-  //   `${new Date(minTime * 1000).toISOString().slice(11, 19)}`,
-  //   "-t",
-  //   `${new Date(maxTime * 1000).toISOString().slice(11, 19)}`,
-  //   "-i",
-  //   "input.mp4",
-  //   "-vf",
-  //   `fps=${fps},scale=${outputW}:-1:flags=lanczos,split[s0][s1];[s0]palettegen[p];[s1][p]paletteuse`,
-  //   "-loop",
-  //   "0",
-  //   "-filter_complex",
-  //   `setpts=PTS/${speed}`,
-  //   `fade=t=in:st=0:d=1,fade=t=out:st=${maxTime - 1}:d=1`,
-  //   "output.gif"
-  // );
-
-
   await ffmpeg.run(
     '-i',
     'input.mp4',
@@ -243,6 +232,8 @@ create.addEventListener("click", async function (event) {
     'gif',
     '-loop',
     '0',
+    '-q:v',
+    quality,
     'output.gif'
   );
 
@@ -251,9 +242,6 @@ create.addEventListener("click", async function (event) {
   const outputURL = URL.createObjectURL(outputBlob);
   gifImage.src = outputURL
   loading.innerText = "";
-
-  // gifImage.src = "test.gif"
-
 })
 
 // ダウンロード
@@ -271,6 +259,7 @@ async function startCapture() {
 
   try {
     videoElem.srcObject = await navigator.mediaDevices.getDisplayMedia({ video: { cursor: "always" }, audio: false });
+    // dumpOptionsInfo();
   } catch (err) {
     console.error("Error: " + err);
   }
@@ -289,16 +278,10 @@ async function startCapture() {
       readVideo(webm);
       videoElem.srcObject = null;
       getVideoProperty();
-      slider.updateOptions({
-      range: {
-        'min': Math.floor(minTime),
-        'max': Math.floor(maxTime)
-        }
-      });
+      sliderUpdate();
     }
   };
   startRecording();
-
 }
 
 // バツ印がクリックされた時
