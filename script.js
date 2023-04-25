@@ -197,7 +197,7 @@ outputWidth.addEventListener("change", function () {
 // Gifに変換
 create.addEventListener("click", async function (event) {
   square.style.visibility = "hidden";
-  getVideoProperty()
+//   getVideoProperty()
 
   const speed = video.playbackRate;
   const fade = document.getElementById("fade").checked;
